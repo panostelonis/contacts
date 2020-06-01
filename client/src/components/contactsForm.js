@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Form, Button } from "react-bootstrap";
 
-import { createContact, getContact, updateContact } from "../utils";
+import { createContact, getContact, updateContact } from "../utils/service";
 
 export default class ContactsForm extends Component {
   constructor(props) {
@@ -12,12 +12,16 @@ export default class ContactsForm extends Component {
     this.onPhoneChange = this.onPhoneChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
-    // Setting up state
-    this.state = {
+    this.defaultState = {
       name: "",
       email: "",
       address: "",
-      phones: [],
+      phones: []
+    };
+
+    // Setting up state
+    this.state = {
+      ...this.defaultState,
     };
   }
 
@@ -42,10 +46,7 @@ export default class ContactsForm extends Component {
       this.props.match.params.id === undefined
     ) {
       this.setState({
-        name: "",
-        email: "",
-        address: "",
-        phones: [],
+        ...this.defaultState,
       });
     }
   }
@@ -54,10 +55,17 @@ export default class ContactsForm extends Component {
     this.setState({ [e.target.id]: e.target.value });
   }
 
-  onPhoneChange(i, event) {
+  onPhoneChange(i, e) {
+    const re = /^[0-9\b]+$/;
     const phones = [...this.state.phones];
-    phones[i] = event.target.value;
-    this.setState({ phones });
+
+    if (
+      (e.target.value === "" || re.test(e.target.value)) &&
+      phones[i].length <= 10
+    ) {
+      phones[i] = e.target.value;
+      this.setState({ phones });
+    }
   }
 
   addPhone() {
@@ -103,7 +111,7 @@ export default class ContactsForm extends Component {
       <div className="form-wrapper">
         <Form onSubmit={this.onSubmit}>
           <Form.Group controlId="name">
-            <Form.Label>Name</Form.Label>
+            <Form.Label>Name*</Form.Label>
             <Form.Control
               required
               type="text"
@@ -113,7 +121,7 @@ export default class ContactsForm extends Component {
           </Form.Group>
 
           <Form.Group controlId="email">
-            <Form.Label>Email</Form.Label>
+            <Form.Label>Email*</Form.Label>
             <Form.Control
               required
               type="email"

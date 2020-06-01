@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Form, Button } from "react-bootstrap";
 
-import { createContact } from "../utils";
+import { createContact } from "../utils/service";
 
 export default class CreateContact extends Component {
   constructor(props) {

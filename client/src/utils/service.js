@@ -1,18 +1,21 @@
 import axios from "axios";
 
+//Get contacts list
 export const getAllContacts = async () => {
   const res = await axios.get(`/api/get-contacts`);
   console.log("Get contacts");
   return res.data || [];
 };
 
+//Create new contact
 export const createContact = async (contact) => {
   const res = await axios.post("/api/create-contact", contact);
   console.log("Create app");
   return res.data || [];
 };
 
-export const deleteContact = async (id) => {
+//Delete current contact
+export const deleteContact = (id) => {
   axios
     .delete("/api/delete-contact/" + id)
     .then((res) => {
@@ -21,9 +24,9 @@ export const deleteContact = async (id) => {
     .catch((error) => {
       console.log(error);
     });
-  console.log("Delete");
 };
 
+//Get current contact
 export const getContact = (id) => {
   return axios
     .get("/api/get-contact/" + id)
@@ -31,6 +34,7 @@ export const getContact = (id) => {
     .catch((err) => console.log(err));
 };
 
+//Update current contact
 export const updateContact = async (id, contact) => {
   const res = await axios.put("/api/update-contact/" + id, contact);
   console.log("Update contact");

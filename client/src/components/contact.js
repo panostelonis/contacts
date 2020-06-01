@@ -1,15 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
-import { deleteContact } from "../utils";
+//import { deleteContact } from "../utils";
 
-const Contact = ({ contact }) => {
+const Contact = ({ contact, onChildClick }) => {
   const { _id, name, email, address, phones } = contact;
 
-  const deleteAndRefresh = (id) => {
-    deleteContact(id);
-    window.location.reload(false);
+  const handleClick = (id) => {
+    onChildClick(id);
   };
 
   return (
@@ -21,14 +19,10 @@ const Contact = ({ contact }) => {
         {phones.map((phone, i) => (phone ? <p key={i}>{phone}</p> : null))}
       </td>
       <td>
-        <Link className="edit-link" to={"/edit-contact/" + _id}>
+        <Button href={"/edit-contact/" + _id} size="sm">
           Edit
-        </Link>
-        <Button
-          onClick={() => deleteAndRefresh(_id)}
-          size="sm"
-          variant="danger"
-        >
+        </Button>{" "}
+        <Button onClick={() => handleClick(_id)} size="sm" variant="danger">
           Delete
         </Button>
       </td>
