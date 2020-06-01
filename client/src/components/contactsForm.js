@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Form, Button } from "react-bootstrap";
 
-import { getContact, updateContact } from "../utils";
+import { createContact, getContact, updateContact } from "../utils";
 
-export default class EditContact extends Component {
+export default class ContactsForm extends Component {
   constructor(props) {
     super(props);
 
@@ -24,14 +24,30 @@ export default class EditContact extends Component {
   componentDidMount() {
     const { match } = this.props;
 
-    getContact(match.params.id).then((contact) =>
+    if (match.params.id !== undefined) {
+      getContact(match.params.id).then((contact) =>
+        this.setState({
+          name: contact.name,
+          email: contact.email,
+          address: contact.address,
+          phones: contact.phones,
+        })
+      );
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.match.params.id !== undefined &&
+      this.props.match.params.id === undefined
+    ) {
       this.setState({
-        name: contact.name,
-        email: contact.email,
-        address: contact.address,
-        phones: contact.phones,
-      })
-    );
+        name: "",
+        email: "",
+        address: "",
+        phones: [],
+      });
+    }
   }
 
   onChange(e) {
@@ -69,13 +85,18 @@ export default class EditContact extends Component {
       phones,
     };
 
-    updateContact(match.params.id, contact);
+    if (match.params.id !== undefined) {
+      updateContact(match.params.id, contact);
+    } else {
+      createContact(contact);
+    }
 
     // Redirect to Contacts List
     this.props.history.push("/contacts-list");
   }
 
   render() {
+    const { match } = this.props;
     const { name, email, address, phones } = this.state;
 
     return (
@@ -84,6 +105,7 @@ export default class EditContact extends Component {
           <Form.Group controlId="name">
             <Form.Label>Name</Form.Label>
             <Form.Control
+              required
               type="text"
               value={name || ""}
               onChange={this.onChange}
@@ -93,6 +115,7 @@ export default class EditContact extends Component {
           <Form.Group controlId="email">
             <Form.Label>Email</Form.Label>
             <Form.Control
+              required
               type="email"
               value={email || ""}
               onChange={this.onChange}
@@ -130,7 +153,7 @@ export default class EditContact extends Component {
           </Button>
 
           <Button variant="danger" size="sm" type="submit">
-            Update
+            {match.params.id !== undefined ? "Save" : "Create"}
           </Button>
         </Form>
       </div>

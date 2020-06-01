@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {Table, Container } from 'react-bootstrap';
+import { Table, Container } from "react-bootstrap";
 
-import Contact from './contact';
-import { getAllContacts } from '../utils'
-
+import Contact from "./contact";
+import { getAllContacts } from "../utils";
 
 export default function ContactsList() {
-
   const [contacts, setContacts] = useState(null);
 
   useEffect(() => {
@@ -17,11 +15,11 @@ export default function ContactsList() {
     const res = await getAllContacts();
     //console.log(res);
     setContacts(res);
-  }
+  };
 
   return (
     <Container>
-      {(contacts && contacts.length > 0) ? ( 
+      {contacts && contacts.length > 0 ? (
         <div className="table-wrapper">
           <Table striped bordered hover>
             <thead>
@@ -33,15 +31,15 @@ export default function ContactsList() {
               </tr>
             </thead>
             <tbody>
-              { contacts.map((contact, i) => <Contact contact={contact} key={i} />) }
+              {contacts.map((contact, i) => (
+                <Contact contact={contact} key={i} />
+              ))}
             </tbody>
           </Table>
-        </div> 
+        </div>
       ) : (
         <p>No contacts found</p>
       )}
     </Container>
   );
-
-
 }
