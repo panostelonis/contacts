@@ -56,16 +56,16 @@ export default class ContactsForm extends Component {
   }
 
   onPhoneChange(i, e) {
-    const re = /^[0-9\b]+$/;
+    //const re = /^[0-9\b]+$/;
     const phones = [...this.state.phones];
 
-    if (
-      (e.target.value === "" || re.test(e.target.value)) &&
-      phones[i].length <= 10
-    ) {
+    //if (
+    //  (e.target.value === "" || re.test(e.target.value)) &&
+    //  phones[i].length < 10
+    //) {
       phones[i] = e.target.value;
       this.setState({ phones });
-    }
+    //} 
   }
 
   addPhone() {
@@ -145,7 +145,7 @@ export default class ContactsForm extends Component {
                 <Form.Group>
                   <Form.Label>Phone</Form.Label>
                   <Form.Control
-                    type="text"
+                    type="number"
                     value={phone}
                     onChange={this.onPhoneChange.bind(this, i)}
                   />
